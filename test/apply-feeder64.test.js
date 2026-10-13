@@ -26,7 +26,7 @@ test('64-bit Feeder route installs the synthetic contract and Lumenite in proces
 
   for (const rel of [
     ['Shaders', 'DLSS5_Feed.fx'], ['Shaders', 'vort_Motion.fx'],
-    ['Shaders', 'ReShade.fxh'], ['Shaders', 'ReShadeUI.fxh'],
+    ['Shaders', 'ReShade.fxh'], ['Shaders', 'ReShadeUI.fxh'], ['Shaders', 'DrawText.fxh'],
     ['Shaders', 'Includes', 'vort_Defs.fxh'], ['Textures', 'vort_BlueNoise.png']
   ]) put(path.join(shaderRoot, ...rel));
   put(path.join(lumeniteRoot, 'Shaders', 'lumenite_Kernel.fx'));

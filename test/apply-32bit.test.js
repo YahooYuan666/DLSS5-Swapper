@@ -42,6 +42,7 @@ test('32-bit DX9 install deploys feeder host and restores every added file', asy
   put(path.join(shaderRoot, 'Shaders', 'vort_Motion.fx'));
   put(path.join(shaderRoot, 'Shaders', 'ReShade.fxh'));
   put(path.join(shaderRoot, 'Shaders', 'ReShadeUI.fxh'));
+  put(path.join(shaderRoot, 'Shaders', 'DrawText.fxh'));
   put(path.join(shaderRoot, 'Shaders', 'Includes', 'vort_Defs.fxh'));
   put(path.join(shaderRoot, 'Textures', 'vort_BlueNoise.png'));
   put(path.join(source.feeder.dgVoodooDir, 'D3D9.dll'));
@@ -69,6 +70,7 @@ test('32-bit DX9 install deploys feeder host and restores every added file', asy
     path.join('reshade-shaders', 'Shaders', 'vort_Motion.fx'),
     path.join('reshade-shaders', 'Shaders', 'ReShade.fxh'),
     path.join('reshade-shaders', 'Shaders', 'ReShadeUI.fxh'),
+    path.join('reshade-shaders', 'Shaders', 'DrawText.fxh'),
     path.join('reshade-shaders', 'Shaders', 'Includes', 'vort_Defs.fxh'),
     path.join('reshade-shaders', 'Textures', 'vort_BlueNoise.png'),
     path.join('host64', 'dlss5-feed-host64.exe'),
@@ -122,6 +124,7 @@ test('Black Flag 32-bit DX11 install targets AC4BFSP and exposes the feeder add-
   put(path.join(shaderRoot, 'Shaders', 'vort_Motion.fx'));
   put(path.join(shaderRoot, 'Shaders', 'ReShade.fxh'));
   put(path.join(shaderRoot, 'Shaders', 'ReShadeUI.fxh'));
+  put(path.join(shaderRoot, 'Shaders', 'DrawText.fxh'));
   put(path.join(shaderRoot, 'Shaders', 'Includes', 'vort_Defs.fxh'));
   put(path.join(shaderRoot, 'Textures', 'vort_BlueNoise.png'));
 

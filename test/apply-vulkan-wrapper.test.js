@@ -18,7 +18,7 @@ test('Vulkan Feeder install/reinstall/restore keeps DXVK files intact for x86 an
   };
   const shaderRoot = path.join(root, 'payload', 'reshade-shaders');
   for (const rel of ['Shaders/DLSS5_Feed.fx', 'Shaders/vort_Motion.fx', 'Shaders/ReShade.fxh',
-    'Shaders/ReShadeUI.fxh', 'Shaders/Includes/vort_Defs.fxh', 'Textures/vort_BlueNoise.png']) put('reshade-shaders/' + rel);
+    'Shaders/ReShadeUI.fxh', 'Shaders/DrawText.fxh', 'Shaders/Includes/vort_Defs.fxh', 'Textures/vort_BlueNoise.png']) put('reshade-shaders/' + rel);
   const layerDir = path.join(root, 'payload', 'vulkan');
   for (const bits of [32, 64]) {
     writePe(path.join(layerDir, `ReShade${bits}.dll`), { bitness: bits, text: 'ReShade Searching for add-ons' });

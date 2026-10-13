@@ -536,6 +536,7 @@ async function applyFeeder(config, log) {
     path.join(exeDir, 'reshade-shaders', 'Shaders', provider === 3 ? 'lumenite_Kernel.fx' : 'vort_Motion.fx'),
     path.join(exeDir, 'reshade-shaders', 'Shaders', 'ReShade.fxh'),
     path.join(exeDir, 'reshade-shaders', 'Shaders', 'ReShadeUI.fxh'),
+    path.join(exeDir, 'reshade-shaders', 'Shaders', 'DrawText.fxh'),
     path.join(exeDir, 'reshade-shaders', 'Shaders', 'Includes', 'vort_Defs.fxh'),
     path.join(exeDir, 'reshade-shaders', 'Textures', 'vort_BlueNoise.png')
   ];

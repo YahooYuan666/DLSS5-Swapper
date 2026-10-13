@@ -307,8 +307,22 @@ function detectApi(file, imports) {
     const sibling = findCaseInsensitive(dir, name);
     // System DLLs live in System32; only the game's own modules sit here.
     if (!sibling || pe.getBitness(sibling) !== pe.getBitness(file)) continue;
-    const inner = apiFromNames(pe.getImports(sibling)) || apiFromMarkers(sibling);
-    if (inner) return { ...inner, via: 'module:' + name };
+    const isUnity = /^unityplayer\.dll$/i.test(name) || pe.versionMentions(sibling, 'Unity');
+    let siblingImports = pe.getImports(sibling);
+    if (isUnity) {
+      siblingImports = siblingImports.filter((n) => n.toLowerCase() !== 'opengl32.dll');
+    }
+    const inner = apiFromNames(siblingImports) || apiFromMarkers(sibling);
+    if (inner) {
+      if (isUnity && inner.api === 'dxgi') {
+        const unityChoices = [
+          { api: 'dxgi', label: 'DirectX 11' },
+          { api: 'dxgi', label: 'DirectX 12' }
+        ];
+        return { api: 'dxgi', label: 'DirectX 11', choices: unityChoices, via: 'module:' + name };
+      }
+      return { ...inner, via: 'module:' + name };
+    }
   }
 
   const named = apiFromFileName(file);
@@ -519,8 +533,9 @@ async function scanGame(gameDir) {
         apiChoices: emulator
           ? emulators.apiChoices(emulator)
           : gameProfile ? gameProfile.choices
-            : wrapped ? [{ api: 'vulkan', label: 'Vulkan' }, { api: detected.api, label: detected.label }]
-              : [{ api: detected.api, label: detected.label }]
+            : detected.choices ? detected.choices
+              : wrapped ? [{ api: 'vulkan', label: 'Vulkan' }, { api: detected.api, label: detected.label }]
+                : [{ api: detected.api, label: detected.label }]
       });
     } else if (DLSS_FILE.test(name) || STREAMLINE_FILE.test(name)) {
       const item = {
@@ -787,6 +802,7 @@ function scanSource(sourceDir) {
       path.join(feeder.shaderRoot, 'Shaders', 'vort_Motion.fx'),
       path.join(feeder.shaderRoot, 'Shaders', 'ReShade.fxh'),
       path.join(feeder.shaderRoot, 'Shaders', 'ReShadeUI.fxh'),
+      path.join(feeder.shaderRoot, 'Shaders', 'DrawText.fxh'),
       path.join(feeder.shaderRoot, 'Shaders', 'Includes', 'vort_Defs.fxh'),
       path.join(feeder.shaderRoot, 'Textures', 'vort_BlueNoise.png')
     ]).every((file) => fs.existsSync(file));
@@ -794,7 +810,8 @@ function scanSource(sourceDir) {
     .concat([
       path.join(feeder.shaderRoot, 'Shaders', 'vort_Motion.fx'),
       path.join(feeder.shaderRoot, 'Shaders', 'ReShade.fxh'),
-      path.join(feeder.shaderRoot, 'Shaders', 'ReShadeUI.fxh')
+      path.join(feeder.shaderRoot, 'Shaders', 'ReShadeUI.fxh'),
+      path.join(feeder.shaderRoot, 'Shaders', 'DrawText.fxh')
     ]).every((file) => fs.existsSync(file));
   feeder.vulkanOk = ['ReShade64.dll', 'ReShade64.json', 'ReShade32.dll', 'ReShade32.json']
     .every((name) => fs.existsSync(path.join(feeder.vulkanLayerDir, name)));

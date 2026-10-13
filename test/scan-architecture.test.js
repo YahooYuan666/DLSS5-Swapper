@@ -194,3 +194,37 @@ test('Assassins Creed Black Flag selects the 32-bit single-player executable', a
   assert.equal(scan.chosen.api, 'dxgi');
   assert.equal(scan.chosen.apiLabel, 'DirectX 11');
 });
+
+test('Unity game importing opengl32 dynamically in UnityPlayer resolves to DirectX', async (t) => {
+  const gameDir = fs.mkdtempSync(path.join(os.tmpdir(), 'dlss5-unity-'));
+  t.after(() => fs.rmSync(gameDir, { recursive: true, force: true }));
+  const gameExe = path.join(gameDir, 'Game.exe');
+  minimalPe(gameExe, { bitness: 64 });
+  // UnityPlayer.dll carries opengl32 in imports and DirectX markers in binary
+  const unityPlayer = path.join(gameDir, 'UnityPlayer.dll');
+  minimalPe(unityPlayer, { bitness: 64, marker: 'D3D11CreateDevice' });
+
+  // Mock pe.getImports so Game.exe imports UnityPlayer.dll, and UnityPlayer.dll imports opengl32.dll
+  const origGetImports = pe.getImports;
+  pe.getImports = (f) => {
+    const base = path.basename(f).toLowerCase();
+    if (base === 'game.exe') return ['unityplayer.dll'];
+    if (base === 'unityplayer.dll') return ['opengl32.dll', 'kernel32.dll'];
+    return origGetImports(f);
+  };
+
+  try {
+    const scan = await scanGame(gameDir);
+    assert.ok(scan.chosen);
+    assert.equal(scan.chosen.path, gameExe);
+    assert.equal(scan.chosen.api, 'dxgi');
+    assert.equal(scan.chosen.apiLabel, 'DirectX 11');
+    assert.equal(scan.chosen.via, 'module:unityplayer.dll');
+    assert.deepEqual(scan.chosen.apiChoices, [
+      { api: 'dxgi', label: 'DirectX 11' },
+      { api: 'dxgi', label: 'DirectX 12' }
+    ]);
+  } finally {
+    pe.getImports = origGetImports;
+  }
+});

@@ -22,7 +22,8 @@ const COMPONENTS = {
   feederLicense: ['DLSS5-Feeder-LICENSE.txt', 'https://raw.githubusercontent.com/jlrouzies-fr/DLSS5-Feeder/v0.7.0/LICENSE', '6562d5a5e3d7534711e34f4b34335f23f067acc839ae5274c1250bf5f4654b8b'],
   vort: ['vort_Shaders-b410b9f.zip', 'https://codeload.github.com/vortigern11/vort_Shaders/zip/b410b9f0c0fbb83c8cb42164aaf1655fab386f4a', '231ba34a75556f9943e359559a89b0d0cc2caa322d9dcdee5630061bf9fe13b6'],
   reshadeHeader: ['ReShade.fxh', 'https://raw.githubusercontent.com/crosire/reshade-shaders/ee30868391d4ad103db60489820102d8fd40e3c1/Shaders/ReShade.fxh', '6dabfbbaf968c3871905d2ea17f96572ff7b1cec01310b5d0e5252b66b30174f'],
-  reshadeUiHeader: ['ReShadeUI.fxh', 'https://raw.githubusercontent.com/crosire/reshade-shaders/ee30868391d4ad103db60489820102d8fd40e3c1/Shaders/ReShadeUI.fxh', '78adf672df47460297eb9fe6dd238d2aafa24510b52b84feb1a745dff70eb901']
+  reshadeUiHeader: ['ReShadeUI.fxh', 'https://raw.githubusercontent.com/crosire/reshade-shaders/ee30868391d4ad103db60489820102d8fd40e3c1/Shaders/ReShadeUI.fxh', '78adf672df47460297eb9fe6dd238d2aafa24510b52b84feb1a745dff70eb901'],
+  drawTextHeader: ['DrawText.fxh', 'https://raw.githubusercontent.com/crosire/reshade-shaders/ee30868391d4ad103db60489820102d8fd40e3c1/Shaders/DrawText.fxh', 'b79cc4dfb3e98bcf4c06193d00ea7631d74f467f73a4deeeee13e71336d3e680']
 };
 
 // Where the DLSS 5 files and the ReShade installer normally live on this
@@ -202,6 +203,7 @@ async function collectFeeder(source) {
   copyFile(path.join(upstream, 'Verify-DLSS5Feeder.ps1'), path.join(feeder, 'Verify-DLSS5Feeder.ps1'));
   copyFile(await pinned(COMPONENTS.reshadeHeader), path.join(feeder, 'reshade-shaders', 'Shaders', COMPONENTS.reshadeHeader[0]));
   copyFile(await pinned(COMPONENTS.reshadeUiHeader), path.join(feeder, 'reshade-shaders', 'Shaders', COMPONENTS.reshadeUiHeader[0]));
+  copyFile(await pinned(COMPONENTS.drawTextHeader), path.join(feeder, 'reshade-shaders', 'Shaders', COMPONENTS.drawTextHeader[0]));
   copyFile(await pinned(COMPONENTS.feederLicense), path.join(feeder, 'licenses', COMPONENTS.feederLicense[0]));
 
   const vortRoot = await extracted(COMPONENTS.vort, 'vort-b410b9f');
